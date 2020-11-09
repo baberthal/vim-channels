@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "vim_channels/vim/buffer"
 require "vim_channels/vim/text_position"
 
 module VimChannels
