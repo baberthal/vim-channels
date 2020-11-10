@@ -3,6 +3,7 @@
 module VimChannels
   module Vim
     # Represents a position in a {Vim::Buffer}.
+    # TODO: Implement Comparable.
     class TextPosition
       # The column in the source code. Note that this is a 1-based index.
       # @return [Integer]
@@ -38,10 +39,12 @@ module VimChannels
         end
       end
 
+      # Returns the hash code of this instance.
       def hash
         column.hash ^ line.hash
       end
 
+      # Compare one instance with another.
       def ==(other)
         other_col, other_line = if other.is_a?(TextPosition)
           [other.column, other.line]
