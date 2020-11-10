@@ -46,6 +46,7 @@ Lint/AssignmentInCondition:
 Metrics/BlockLength:
   Exclude:
     - Vagrantfile
+    - Guardfile
 
 Metrics/ClassLength:
   Max: 150
@@ -64,9 +65,6 @@ Metrics/ModuleLength:
 
 Style/CommandLiteral:
   EnforcedStyle: percent_x
-
-Style/Documentation:
-  Enabled: false
 
 Style/SpecialGlobalVars:
   EnforcedStyle: use_perl_names
