@@ -39,6 +39,12 @@ Layout/EndAlignment:
 Lint/AssignmentInCondition:
   Enabled: false
 
+# RuboCop isn't smart enough to know that calling `super` in the classes in
+# this file does nothing.
+Lint/MissingSuper:
+  Exclude:
+    - lib/vim_channels/vim/command.rb
+
 ##################
 #  Metrics Cops  #
 ##################
