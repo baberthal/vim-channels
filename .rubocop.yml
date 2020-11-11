@@ -31,6 +31,11 @@ Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
   AutoCorrect: true
 
+Layout/LineLength:
+  Max: 81
+  Exclude:
+    - Vagrantfile
+
 ###############
 #  Lint Cops  #
 ###############
@@ -57,10 +62,8 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Max: 150
 
-Layout/LineLength:
-  Max: 81
-  Exclude:
-    - Vagrantfile
+Metrics/MethodLength:
+  Max: 15
 
 Metrics/ModuleLength:
   Max: 150
