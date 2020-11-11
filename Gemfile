@@ -17,6 +17,7 @@ group :development, :test do
 
   gem "guard"
   gem "guard-rspec"
+  gem "guard-yard"
 
   gem "colorize"
   gem "pry"
