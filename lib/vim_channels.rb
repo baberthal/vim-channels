@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-require "vim_channels/version"
+require "json"
 
+require "vim_channels/version"
+require "vim_channels/logging"
+require "vim_channels/message"
 require "vim_channels/vim"
 
 module VimChannels

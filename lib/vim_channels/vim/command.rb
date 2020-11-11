@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "json"
-
 module VimChannels
   module Vim
     # With a JSON channel the process can send commands to Vim that will be
@@ -193,7 +191,6 @@ module VimChannels
       # Representation of a `redraw` command.
       class Redraw < Command
         # @api private
-        # @private
         def initialize(force)
           @force = force
         end
@@ -207,7 +204,6 @@ module VimChannels
       # Representation of an `ex` command.
       class Ex < Command
         # @api private
-        # @private
         def initialize(command)
           @command = command.to_s
         end
@@ -221,7 +217,6 @@ module VimChannels
       # Representation of a `normal` mode command.
       class Normal < Command
         # @api private
-        # @private
         def initialize(command)
           @command = command.to_s
         end
@@ -235,7 +230,6 @@ module VimChannels
       # Representation of an `expr` command.
       class Expr < Command
         # @api private
-        # @private
         def initialize(expression, id: nil)
           @expression = expression.to_s
           @id = id
@@ -254,7 +248,6 @@ module VimChannels
       # Representation of a `call` command.
       class Call < Command
         # @api private
-        # @private
         def initialize(function, args, id: nil)
           @function = function.to_s
           @args = args
