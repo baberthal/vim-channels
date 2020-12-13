@@ -4,7 +4,7 @@ require_relative "lib/vim_channels/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "vim_channels"
-  spec.version       = VimChannels::VERSION
+  spec.version       = VimChannels::VERSION::STRING
   spec.authors       = ["J. Morgan Lieberthal"]
   spec.email         = ["j.morgan.lieberthal@gmail.com"]
 
