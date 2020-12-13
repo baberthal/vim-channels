@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "socket"
-
 module VimChannels
   module Backends
     # Backend to act as a TCP socket server.
