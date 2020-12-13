@@ -11,6 +11,8 @@ gem "rspec", "~> 3.0"
 gem "concurrent-ruby", "~> 1.1.7"
 gem "concurrent-ruby-ext", "~> 1.1.7", platforms: :mri
 
+gem "eventmachine"
+
 group :development, :test do
   gem "rubocop"
   gem "rubocop-rspec"
