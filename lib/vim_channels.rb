@@ -1,13 +1,47 @@
 # frozen_string_literal: true
 
 require "json"
+require "forwardable"
+require "eventmachine"
+
+# Main VimChannels module.
+module VimChannels
+  autoload :Connection, "vim_channels/connection"
+  autoload :Logging,    "vim_channels/logging"
+  autoload :Message,    "vim_channels/message"
+  autoload :Server,     "vim_channels/server"
+
+  module Backends
+    autoload :Base,        "vim_channels/backends/base"
+    autoload :StdioServer, "vim_channels/backends/stdio_server"
+    autoload :TcpServer,   "vim_channels/backends/tcp_server"
+  end
+
+  module Vim
+    autoload :Buffer,       "vim_channels/vim/buffer"
+    autoload :Command,      "vim_channels/vim/command"
+    autoload :TextPosition, "vim_channels/vim/text_position"
+  end
+
+  # Base error class
+  class Error < StandardError; end
+
+  # Error raised when a response times out.
+  class ResponseTimeoutError < Error; end
+
+  # Error raised when a response is aborted.
+  class ResponseAbortedError < Error; end
+
+  # Error raised when a response fails.
+  class ResponseFailedError < Error; end
+
+  def self.win?
+    /mswin|mingw/.match?(RUBY_PLATFORM)
+  end
+
+  def self.linux?
+    /linux/.match?(RUBY_PLATFORM)
+  end
+end
 
 require "vim_channels/version"
-require "vim_channels/logging"
-require "vim_channels/message"
-require "vim_channels/vim"
-
-module VimChannels
-  class Error < StandardError; end
-  # Your code goes here...
-end
