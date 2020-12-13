@@ -14,6 +14,10 @@ module VimChannels
     #
     # * {#connect}
     # * {#disconnect}
+    #
+    # Additionally, if your backend is not based on EventMachine, you also need
+    # to implement the following methods:
+    #
     # * {#start}
     # * {#stop}
     # * {#stop!}
@@ -21,22 +25,24 @@ module VimChannels
     #
     class Base
       # Server serving the connections through the backend.
+      #
       # @return [Server]
       attr_accessor :server
 
       # Maximum time to wait for incoming data to arrive.
+      #
       # @return [Integer]
       attr_accessor :timeout
 
       # Maximum number of file or socket descriptors that the server may open.
+      #
       # @return [Integer]
       attr_accessor :maximum_connections
 
-      # Allows use of threads in the backend.
+      # Maximum number of connections that can persist.
       #
-      # @return [Boolean]
-      attr_accessor :threaded
-      alias threaded? threaded
+      # @return [Integer]
+      attr_accessor :maximum_persistent_connections
 
       # Allows setting of the eventmachine threadpool size.
       #
@@ -49,11 +55,27 @@ module VimChannels
         EventMachine.threadpool_size = size
       end
 
+      # Allows use of threads in the backend.
+      #
+      # @return [Boolean]
+      attr_accessor :threaded
+      alias threaded? threaded
+
+      # Disable the use of epoll in Linux
+      #
+      # @return [Boolean]
+      attr_accessor :no_epoll
+      alias no_epoll? no_epoll
+
       def initialize
         @connections         = {}
         @timeout             = Server::DEFAULT_TIMEOUT
         @maximum_connections = Server::DEFAULT_MAXIMUM_CONNECTIONS
+        @maximum_persistent_connections =
+          Server::DEFAULT_MAXIMUM_PERSISTENT_CONNECTIONS
+        @no_epoll            = false
         @running             = false
+        @started_reactor     = false
         @stopping            = false
         @threaded            = nil
       end
@@ -63,9 +85,19 @@ module VimChannels
       # @return [void]
       def start
         @stopping = false
-        connect
-        yield if block_given?
-        @running = true
+        starter   = proc do
+          connect
+          yield if block_given?
+          @running = true
+        end
+
+        # Allow for early run up of eventmachine
+        if EventMachine.reactor_running?
+          starter.call
+        else
+          @started_reactor = true
+          EventMachine.run(&starter)
+        end
       end
 
       # Stop the backend from accepting any new connections.
@@ -90,25 +122,45 @@ module VimChannels
         @running  = false
         @stopping = false
 
+        EventMachine.stop if @started_reactor && EventMachine.reactor_running?
         @connections.each_value(&:close_connection)
         close
       end
 
-      # Configure the backend.
+      # Configure the backend. This method will be called before dropping
+      # superuser privileges, so you can do lots of stuff here.
       #
       # @return [void]
-      def config; end
+      def config
+        # See http://rubyeventmachine.com/pub/rdoc/files/EPOLL.html
+        EventMachine.epoll unless no_epoll?
+
+        # Set the maximum number of socket descriptors that the server may open.
+        # The process needs to have the required privileges to set it higher
+        # than 1024 on some systems.
+        return if VimChannels.win?
+
+        @maximum_connections =
+          EventMachine.set_descriptor_table_size(@maximum_connections)
+      end
 
       # Free up resources used by the backend.
       #
       # @return [void]
       def close; end
 
-      # Returns `true` if the backend is connected and running.
+      # Returns +true+ if the backend is connected and running.
       #
       # @return [Boolean]
       def running?
         @running
+      end
+
+      # Returns +true+ if we started the EventMachine reactor.
+      #
+      # @return [Boolean]
+      def started_reactor?
+        @started_reactor
       end
 
       # Called by a connection when it's unbinded.

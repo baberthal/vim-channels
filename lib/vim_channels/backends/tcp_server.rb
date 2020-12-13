@@ -16,17 +16,27 @@ module VimChannels
         super()
       end
 
+      # Connects the server.
+      def connect
+        @signature = EventMachine.start_server(@host, @port, Connection,
+                                               &method(:initialize_connection))
+        binary_name = EventMachine.get_sockname(@signature)
+        port_name = Socket.unpack_sockaddr_in(binary_name)
+        @port = port_name[0]
+        @host = port_name[1]
+        @signature
+      end
+
+      # Stops the server.
+      def disconnect
+        EventMachine.stop_server(@signature)
+      end
+
       # Returns a string describing what host the server is bound to, and what
       # port it is listening on.
       def to_s
         "#{@host}:#{@port}"
       end
-
-      # Connects the backend to the server.
-      def connect; end
-
-      # Disconnects the backend from the server.
-      def disconnect; end
     end
   end
 end
