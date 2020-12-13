@@ -44,7 +44,11 @@ guard :rspec, rspec_options do
   dsl.watch_spec_files_for(ruby.lib_files)
 end
 
-yard_options = { stdout: "log/yard-stdout.log", stderr: "log/yard-stderr.log" }
+yard_options = {
+  stdout: "log/yard-stdout.log",
+  stderr: "log/yard-stderr.log",
+  cli: "-r"
+}
 guard "yard", yard_options do
   watch(%r{lib/.+\.rb})
 end
