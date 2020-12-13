@@ -7,7 +7,8 @@ module VimChannels
     # * initialization of the connections
     # * monitoring of the active connections.
     #
-    # Implementing your own backend
+    # == Implementing your own backend
+    #
     # You can create your own minimal backend by inheriting this class and
     # defining the following methods:
     #
@@ -34,11 +35,18 @@ module VimChannels
       # Allows use of threads in the backend.
       #
       # @return [Boolean]
-      attr_writer :threaded
+      attr_accessor :threaded
+      alias threaded? threaded
 
-      # (see #threaded=)
-      def threaded?
-        @threaded
+      # Allows setting of the eventmachine threadpool size.
+      #
+      # @return [Integer]
+      attr_reader :threadpool_size
+
+      # (see #threadpool_size)
+      def threadpool_size=(size)
+        @threadpool_size = size
+        EventMachine.threadpool_size = size
       end
 
       def initialize

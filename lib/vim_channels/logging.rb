@@ -25,51 +25,88 @@ module VimChannels
       # @return [Logger]
       attr_reader :trace_logger
 
+      # Enable trace logging.
+      #
+      # @param enabled [Boolean]
+      #
+      # @return [void]
       def trace=(enabled)
         @trace_logger = (Logger.new($stdout) if enabled)
       end
 
+      # Returns +true+ if trace logging is enabled.
+      #
+      # @return [Boolean]
       def trace?
         !@trace_logger.nil?
       end
 
+      # Silence the logger.
+      #
+      # @param shh [Boolean]
+      #
+      # @return [void]
       def silent=(shh)
         if shh
           @logger = nil
         else
           @logger ||= ::Logger.new($stdout)
+          nil
         end
       end
 
+      # Returns +true+ if the logger is nil.
+      #
+      # @return [Boolean]
       def silent?
         !@logger.nil?
       end
 
+      # Returns the level of the logger.
+      #
+      # @return [Logger::Severity]
       def level
         @logger ? @logger.level : nil
       end
 
+      # Sets the level of the logger.
+      #
+      # @param value [Logger::Severity] One of the constants in
+      #   +Logger::Severity+.
       def level=(value)
         @logger = ::Logger.new($stdout) if @logger.nil?
         @logger.level = value
       end
 
+      # Sets a custom logger.
+      #
+      # @param custom_logger [Logger] The custom logger to use.
       def logger=(custom_logger)
         _validate_logger!(custom_logger)
         @logger = custom_logger
       end
 
+      # Sets the trace logger.
+      #
+      # @param custom_tracer [Logger] The custom trace logger to use.
       def trace_logger=(custom_tracer)
         _validate_logger!(custom_tracer)
         @trace_logger = custom_tracer
       end
 
+      # Logs a message at a given level.
+      #
+      # @param msg [#to_s] Message to log
+      # @param level [Logger::Severity] The severity level at which to log +msg+
       def log_msg(msg, level = ::Logger::INFO)
         return unless @logger
 
         @logger.add(level, msg)
       end
 
+      # Logs a trace message.
+      #
+      # @param msg [#to_s] The message to log using +trace_logger+.
       def trace_msg(msg)
         return unless @trace_logger
 
@@ -93,12 +130,18 @@ module VimChannels
     logger.level     = Logger::INFO
     logger.formatter = Logging::SimpleFormatter.new
 
+    # Returns true if the logger is silenced.
+    #
+    # @return [Boolean]
     def silent
       Logging.silent?
     end
 
     alias silent? silent
 
+    # Enables silencing of logger.
+    #
+    # @param value [Boolean]
     def silent=(value)
       Logging.silent = value
     end
@@ -137,16 +180,5 @@ module VimChannels
     end
     module_function :log_error
     public :log_error
-
-    # Simple singleton class to use as a shared logger.
-    class Log
-      def self.unknown(*); end
-      def self.fatal(*); end
-      def self.error(*); end
-      def self.warn(*); end
-      def self.info(*); end
-      def self.debug(*); end
-      def self.log(*); end
-    end
   end
 end

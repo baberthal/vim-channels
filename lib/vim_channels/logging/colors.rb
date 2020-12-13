@@ -85,11 +85,6 @@ module VimChannels
         reversed: REVERSED
       }.freeze
 
-      def self.all_colors(&block)
-        FOREGROUND_COLORS.each_value(&block)
-      end
-      class << self; alias each_color all_colors; end
-
     module_function
 
       # Returns a {ColoredString} wrapper to colorize `string`.

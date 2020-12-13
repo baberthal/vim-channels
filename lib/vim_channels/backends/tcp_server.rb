@@ -16,12 +16,16 @@ module VimChannels
         super()
       end
 
+      # Returns a string describing what host the server is bound to, and what
+      # port it is listening on.
       def to_s
         "#{@host}:#{@port}"
       end
 
+      # Connects the backend to the server.
       def connect; end
 
+      # Disconnects the backend from the server.
       def disconnect; end
     end
   end

@@ -11,12 +11,14 @@ module VimChannels
   autoload :Message,    "vim_channels/message"
   autoload :Server,     "vim_channels/server"
 
+  # Module that holds Backend implementations.
   module Backends
     autoload :Base,        "vim_channels/backends/base"
     autoload :StdioServer, "vim_channels/backends/stdio_server"
     autoload :TcpServer,   "vim_channels/backends/tcp_server"
   end
 
+  # Module that holds vim support classes and methods.
   module Vim
     autoload :Buffer,       "vim_channels/vim/buffer"
     autoload :Command,      "vim_channels/vim/command"
@@ -35,10 +37,16 @@ module VimChannels
   # Error raised when a response fails.
   class ResponseFailedError < Error; end
 
+  # Returns +true+ if VimChannels is running on a Windows platform.
+  #
+  # @return [Boolean]
   def self.win?
     /mswin|mingw/.match?(RUBY_PLATFORM)
   end
 
+  # Returns +true+ if VimChannels is running on a Linux platform.
+  #
+  # @return [Boolean]
   def self.linux?
     /linux/.match?(RUBY_PLATFORM)
   end
