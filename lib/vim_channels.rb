@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require "concurrent"
 require "forwardable"
 require "eventmachine"
 
