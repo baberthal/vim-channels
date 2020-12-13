@@ -9,9 +9,6 @@ module VimChannels
     include Logging
     extend Forwardable
 
-    # Regexp to match host
-    HOST_REXEXP = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.freeze
-
     # Default timeout for the server, in seconds.
     DEFAULT_TIMEOUT                        = 30
     # Default host to which the server will be bound.
@@ -20,8 +17,6 @@ module VimChannels
     DEFAULT_PORT                           = 1337
     # Default number of maximum connections the server will accept.
     DEFAULT_MAXIMUM_CONNECTIONS            = 1024
-    # Default number of maximum persistent connections the server will have.
-    DEFAULT_MAXIMUM_PERSISTENT_CONNECTIONS = 100
 
     # Application (i.e. handler) that is called with responses from vim
     #

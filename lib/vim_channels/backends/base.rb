@@ -39,11 +39,6 @@ module VimChannels
       # @return [Integer]
       attr_accessor :maximum_connections
 
-      # Maximum number of connections that can persist.
-      #
-      # @return [Integer]
-      attr_accessor :maximum_persistent_connections
-
       # Allows setting of the eventmachine threadpool size.
       #
       # @return [Integer]
@@ -71,8 +66,6 @@ module VimChannels
         @connections         = {}
         @timeout             = Server::DEFAULT_TIMEOUT
         @maximum_connections = Server::DEFAULT_MAXIMUM_CONNECTIONS
-        @maximum_persistent_connections =
-          Server::DEFAULT_MAXIMUM_PERSISTENT_CONNECTIONS
         @no_epoll            = false
         @running             = false
         @started_reactor     = false
