@@ -15,6 +15,7 @@ require "yard"
 
 YARD::Rake::YardocTask.new(:yard) do |t|
   t.files = ["lib/**/*.rb", "-", "README.md", "CODE_OF_CONDUCT.md"]
+  t.stats_options = ["--list-undoc"]
 end
 
 task default: %i[spec rubocop yard]
