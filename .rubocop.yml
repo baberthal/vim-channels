@@ -96,4 +96,8 @@ Style/ParallelAssignment:
 RSpec/MultipleExpectations:
   Max: 2
 
+RSpec/InstanceVariable:
+  Exclude:
+    - 'spec/vim_channels/logging_spec.rb'
+
 #  vim: set ts=8 sw=2 tw=0 ft=yaml et :
