@@ -88,4 +88,12 @@ Style/PerlBackrefs:
 Style/ParallelAssignment:
   Enabled: false
 
+
+################
+#  RSpec Cops  #
+################
+
+RSpec/MultipleExpectations:
+  Max: 2
+
 #  vim: set ts=8 sw=2 tw=0 ft=yaml et :
