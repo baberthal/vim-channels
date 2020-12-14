@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+class DummyBackend < VimChannels::Backends::TcpServer
+  def initialize(host, port, *)
+    super(host, port)
+  end
+end
+
 RSpec.describe VimChannels::Server do
   let(:server) { described_class.new("0.0.0.0", 1337) }
 
@@ -49,9 +55,9 @@ RSpec.describe VimChannels::Server do
       expect(server.port).to eq 8080
     end
 
-    it "sets socket" do
-      server = described_class.new("/tmp/vim-channels.sock")
-      expect(server.socket).to eq "/tmp/vim-channels.sock"
+    it "sets stdio" do
+      server = described_class.new("stdio")
+      expect(server.stdio).to be true
     end
 
     it "sets host, port, and app" do
@@ -63,21 +69,20 @@ RSpec.describe VimChannels::Server do
     end
 
     it "sets host, port, and backend" do
-      server = described_class.new("192.168.1.1", 8080,
-                                   backend: VimChannels::Backends::StdioServer)
+      server = described_class.new("192.168.1.1", 8080, backend: DummyBackend)
 
       expect(server.host).not_to be_nil
-      expect(server.backend).to be_a VimChannels::Backends::StdioServer
+      expect(server.backend).to be_a DummyBackend
     end
 
     it "sets host, port, app, and backend" do
       app = proc { nil }
       server = described_class.new("192.168.1.1", 8080, app,
-                                   backend: VimChannels::Backends::StdioServer)
+                                   backend: DummyBackend)
 
       expect(server.host).not_to be_nil
       expect(server.app).to eq app
-      expect(server.backend).to be_a VimChannels::Backends::StdioServer
+      expect(server.backend).to be_a DummyBackend
     end
 
     it "can accept a string for port" do
@@ -88,8 +93,11 @@ RSpec.describe VimChannels::Server do
     end
 
     it "does not register signals when signals: false" do
+      server = instance_double(described_class)
+      allow(described_class).to receive(:new).and_return(server)
+      allow(server).to receive(:setup_signals)
       described_class.new(signals: false)
-      expect(described_class).not_to have_received(:setup_signals)
+      expect(server).not_to have_received(:setup_signals)
     end
   end
 end

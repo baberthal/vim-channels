@@ -4,6 +4,16 @@ module VimChannels
   module Backends
     # Backend to act as a TCP socket server.
     class TcpServer < Base
+      # Address on which the server is listening for connections.
+      #
+      # @return [String]
+      attr_accessor :host
+
+      # Port on which the server is listening for connections.
+      #
+      # @return [Integer]
+      attr_accessor :port
+
       # Initialize a new TcpServer backend.
       #
       # @param host [String] Host to bind the server to

@@ -47,6 +47,11 @@ module VimChannels
     #   @return [Boolean]
     def_delegators :backend, :threaded?, :threaded=
 
+    # @!attribute [rw] threadpool_size
+    #   Allows setting of EventMachine threadpool size
+    #   @return [Integer]
+    def_delegators :backend, :threadpool_size, :threadpool_size=
+
     # @!attribute [r] host
     #   Address on which the server is listening for connections.
     #   @return [String]
@@ -60,6 +65,20 @@ module VimChannels
     #   Unix domain socket on which the server is listening for connections.
     #   @return [Socket]
     def_delegator :backend, :socket
+
+    # @!attribute [r] stdio
+    #   Returns true if the server operates over stdio.
+    #   @return [Boolean]
+    #
+    # @!method stdio?
+    #   Returns true if the server operates over stdio.
+    #   @return [Boolean]
+    def_delegators :backend, :stdio, :stdio?
+
+    # @!attribute [rw] no_epoll
+    #   Disable use of epoll on Linux.
+    #   @return [Boolean]
+    def_delegators :backend, :no_epoll, :no_epoll=
 
     # @overload initialize(host, port, app)
     #   Create a new server bound to +host+, listening on +port+ and using +app+
