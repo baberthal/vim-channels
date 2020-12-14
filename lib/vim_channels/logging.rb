@@ -30,7 +30,11 @@ module VimChannels
       #
       # @return [void]
       def trace=(enabled)
-        @trace_logger = (Logger.new($stdout) if enabled)
+        if enabled
+          @trace_logger ||= Logger.new($stdout)
+        else
+          @trace_logger = nil
+        end
       end
 
       # Returns +true+ if trace logging is enabled.

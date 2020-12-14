@@ -113,7 +113,7 @@ RSpec.describe VimChannels::Logging do
     it "emits trace messages when tracing is enabled" do
       described_class.trace = true
       obj.trace("aloha ohana")
-      expect(@custom_tracer).to have_received(:info).with(1, "aloha ohana")
+      expect(@custom_tracer).to have_received(:info).with("aloha ohana")
     end
   end
 
