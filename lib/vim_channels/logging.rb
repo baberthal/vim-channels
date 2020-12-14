@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "vim_channels/logging/colors"
 require "logger"
 
 module VimChannels
